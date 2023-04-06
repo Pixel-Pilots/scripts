@@ -1,19 +1,31 @@
 #!/bin/bash
 
-output=${1-"webp"}
+while [ $# -gt 0 ]; do
+    if [[ $1 == "--"* ]]; then
+        v="${1/--/}"
+        declare "$v"="$2"
+        shift
+    fi
+    shift
+done
 
-# Set the input and output folder paths
-input_folder="."
+dir="${dir:-.}"
+in="${in:-png}"
+out="${out:-webp}"
 
-# Iterate through all files in the input folder
-for input_file in "$input_folder"/*.png; do
-  # Check if the file is a PNG image
-  if [ -f "$input_file" ]; then
-    # Construct the output file path
-    filename=$(basename "$input_file")
+echo "Input folder: $dir"
+echo "Input type: $in"
+echo "Output type: $out"
 
-    # Run the FFmpeg command to convert the PNG to AVIF
-    npx @squoosh/cli --$output auto $input_file
-    echo "Converted $input_file to $output"
+# Iterate through all files in the in folder
+for in_file in "$dir"/*."$in"; do
+  # Check if the file is an image of the in type
+  if [ -f "$in_file" ]; then
+    # Construct the out file path
+    filename=$(basename "$in_file")
+
+    # Run the squoosh CLI command to convert the image
+    npx @squoosh/cli --$out auto $in_file
+    echo "Converted $in_file to $out"
   fi
 done
