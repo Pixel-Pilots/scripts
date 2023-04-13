@@ -25,7 +25,7 @@ for in_file in "$dir"/*."$in"; do
     filename=$(basename "$in_file")
 
     # Run the squoosh CLI command to convert the image
-    npx @squoosh/cli --$out auto $in_file
+    npx @squoosh/cli --$out auto $in_file -d $dir
     echo "Converted $in_file to $out"
   fi
 done
