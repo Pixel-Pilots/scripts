@@ -7,8 +7,16 @@
 ### image-converter.sh
 
 This script converts all images in a folder to another file format.
-Usage example: `bash image-converter.sh --dir ~/test --out avif`
+Usage example: `bash image-converter.sh --dir ~/test --in png --out webp`
 Defaults to current folder, and png -> webp
+
+### check-package-manager.sh
+
+This script will check which package manager is used in the current folder/project and return it.
+Best used combined with an alias, like `alias pm='bash ~/scripts/check-package-manager.sh'` in your `.bashrc` or `.zshrc`.
+
+Usage example: `bash check-package-manager.sh`
+Output: `yarn` || `npm` || `pnpm` || `No package manager found`
 
 ## Python
 
