@@ -12,10 +12,16 @@ done
 dir="${dir:-.}"
 in="${in:-png}"
 out="${out:-webp}"
+q="${q:-auto}"
+
+if [ $q != "auto" ]; then
+  q="{"quality":$q}"
+fi
 
 echo "Input folder: $dir"
 echo "Input type: $in"
 echo "Output type: $out"
+echo "Quality: $q"
 
 # Iterate through all files in the in folder
 for in_file in "$dir"/*."$in"; do
@@ -25,7 +31,7 @@ for in_file in "$dir"/*."$in"; do
     filename=$(basename "$in_file")
 
     # Run the squoosh CLI command to convert the image
-    npx @squoosh/cli --$out auto $in_file -d $dir
+    npx @squoosh/cli --$out $q $in_file -d $dir
     echo "Converted $in_file to $out"
   fi
 done
