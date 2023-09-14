@@ -24,3 +24,7 @@ Output: `yarn` || `npm` || `pnpm` || `No package manager found`
 
 Converts a dictionary object into an array of objects, and removes the primary key from the object.
 Usage example: `python3 remove-primary-keys.py -i /test/currencies.json -o output.json`
+
+## License
+
+[MIT](LICENSE)
