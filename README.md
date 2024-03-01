@@ -10,6 +10,21 @@ This script converts all images in a folder to another file format.
 Usage example: `bash image-converter.sh --dir ~/test --in png --out webp`
 Defaults to current folder, and png -> webp
 
+#### Install
+
+First you need to install squoosh by running
+```bash
+npm i -g @squoosh/cli
+```
+
+#### Node version
+If you encounter an error with INVALID URL.
+Try using node 16.
+
+```bash
+nvm use 16
+```
+
 ### check-package-manager.sh
 
 This script will check which package manager is used in the current folder/project and return it.
