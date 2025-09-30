@@ -55,6 +55,8 @@ Host github.com github-work
 
 and need to toggle which one has the github.com host alias.
 
+Best used combined with an alias, like `alias github-toggle='bash ~/scripts/github-ssh-toggle.sh'` in your `.bashrc` or `.zshrc`.
+
 #### Prerequisites
 
 1. Add a `.env` file containing the states you want to toggle between, examples provided in `.env.example`
