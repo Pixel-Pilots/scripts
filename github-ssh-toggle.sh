@@ -1,6 +1,47 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Usage function
+usage() {
+    cat << EOF
+Usage: $0 [OPTIONS]
+
+Toggle or set GitHub SSH configuration state.
+
+OPTIONS:
+    --default     Set to default state (don't toggle)
+    --toggled     Set to toggled state (don't toggle)
+    --help        Show this help message
+
+If no options are provided, the script will toggle between states as before.
+
+EOF
+}
+
+# Parse command line arguments
+TARGET_STATE=""
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --default)
+            TARGET_STATE="default"
+            shift
+            ;;
+        --toggled)
+            TARGET_STATE="toggled"
+            shift
+            ;;
+        --help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
 # Files and constants
 SSH_DIR="${HOME}/.ssh"
 CONFIG="${SSH_DIR}/config"
@@ -68,11 +109,17 @@ if [[ -z "$DEFAULT_CONTENT" || -z "$TOGGLED_CONTENT" ]]; then
     exit 1
 fi
 
-# Decide next state (only used when marker exists)
-state="default"
-if [[ -f "$STATE_FILE" ]]; then
-    if [[ "$(cat "$STATE_FILE")" == "default" ]]; then
-        state="toggled"
+# Decide next state
+if [[ -n "$TARGET_STATE" ]]; then
+    # Use explicitly requested state
+    state="$TARGET_STATE"
+else
+    # Default behavior: toggle (only used when marker exists)
+    state="default"
+    if [[ -f "$STATE_FILE" ]]; then
+        if [[ "$(cat "$STATE_FILE")" == "default" ]]; then
+            state="toggled"
+        fi
     fi
 fi
 
@@ -85,10 +132,18 @@ if $has_marker; then
     echo "$state" > "$STATE_FILE"
     if [[ "$state" == "toggled" ]]; then
         new_block="$TOGGLED_CONTENT"
-        echo "Marker found. Switching to TOGGLED state."
+        if [[ -n "$TARGET_STATE" ]]; then
+            echo "Marker found. Setting to TOGGLED state."
+        else
+            echo "Marker found. Switching to TOGGLED state."
+        fi
     else
         new_block="$DEFAULT_CONTENT"
-        echo "Marker found. Switching to DEFAULT state."
+        if [[ -n "$TARGET_STATE" ]]; then
+            echo "Marker found. Setting to DEFAULT state."
+        else
+            echo "Marker found. Switching to DEFAULT state."
+        fi
     fi
 
     # Keep up to marker (inclusive), replace the rest
